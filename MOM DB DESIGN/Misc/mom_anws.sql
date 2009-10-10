@@ -1,0 +1,7 @@
+INSERT INTO MOM_ANWS
+(MOM_USR_ID, MOM_QSTN_ID, ANSWER)
+VALUES (777777, 1, 'BaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaB')
+
+select * from mom_usr
+
+EXEC SP_MOM_ANWS_GET_BY_MOM_QSTN_ID 1
