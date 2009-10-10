@@ -305,6 +305,6 @@ CREATE TABLE MOM_MAIL
 	[MOM_TO_EMAIL] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MOM_SUBJECT] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MOM_BODY] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[MOM_READ] [bit] NULL,
+	[MOM_READ] [bit] DEFAULT (0),
 	[TIME] [datetime] DEFAULT (GETDATE())
 )
