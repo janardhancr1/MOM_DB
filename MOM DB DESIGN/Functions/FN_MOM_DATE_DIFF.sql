@@ -1,4 +1,4 @@
-CREATE FUNCTION dbo.FN_MOM_DATE_DIFF 
+ALTER FUNCTION dbo.FN_MOM_DATE_DIFF 
 ( 
     @d1 DATETIME, 
     @d2 DATETIME 
@@ -9,7 +9,7 @@ BEGIN
     DECLARE @minutes INT, @word VARCHAR(255) 
     SET @minutes = ABS(DATEDIFF(MINUTE, @d1, @d2)) 
     IF @minutes = 0 
-        SET @word = '0 minutes.' 
+        SET @word = '0 minutes ago' 
     ELSE 
     BEGIN 
         SET @word = '' 
