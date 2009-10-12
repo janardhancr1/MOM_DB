@@ -890,6 +890,8 @@ AS
 		(
 			  MOM_USR_ID
 			, SHARE
+			, TYPE
+			, TYPE_SHARE
 		)
 		OUTPUT	  INSERTED.ID
 			, INSERTED.MOM_USR_ID
@@ -901,6 +903,8 @@ AS
 		(
 			  @MOM_USR_ID
 			, @SHARE
+			, @TYPE
+			, @TYPE_SHARE
 		)
 		
 		SELECT	*
