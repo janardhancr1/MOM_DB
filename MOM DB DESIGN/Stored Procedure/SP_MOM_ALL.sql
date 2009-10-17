@@ -1000,6 +1000,8 @@ AS
 		INNER JOIN MOM_USR MU (NOLOCK)
 		ON	MFC.MOM_USR_ID = MU.ID
 	WHERE	MFC.DELETED = 0
+	
+	EXEC SP_MOM_RCP_RECENT
 
 GO
 
@@ -1623,6 +1625,8 @@ AS
 	WHERE	MBC.MOM_BLG_ID = @MOM_BLG_ID
 GO
 
+-----------------------------------------------------------------------------------------
+
 IF OBJECT_ID('SP_MOM_BLG_CMT_ADD') IS NOT NULL
 	DROP PROC SP_MOM_BLG_CMT_ADD
 GO
@@ -1670,4 +1674,23 @@ AS
 	
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
+GO
+
+-----------------------------------------------------------------------------------------
+
+IF OBJECT_ID('SP_MOM_RCP_RECENT') IS NOT NULL
+	DROP PROC SP_MOM_RCP_RECENT
+GO
+
+CREATE PROC SP_MOM_RCP_RECENT
+AS
+	SET TRAN ISOLATION LEVEL READ UNCOMMITTED
+	SET NOCOUNT ON
+
+	SELECT	TOP 4
+		  ID
+		, NAME
+		, DESCRIPTION
+	FROM	MOM_RCP
+	ORDER BY	ID DESC
 GO
