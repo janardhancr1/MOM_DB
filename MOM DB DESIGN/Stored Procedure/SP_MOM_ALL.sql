@@ -1000,8 +1000,24 @@ AS
 		INNER JOIN MOM_USR MU (NOLOCK)
 		ON	MFC.MOM_USR_ID = MU.ID
 	WHERE	MFC.DELETED = 0
+
+	EXEC SP_MOM_RCP_RECENT;
 	
-	EXEC SP_MOM_RCP_RECENT
+	SELECT	  TOP 4 
+		  MU.ID
+		, MU.FULL_NAME
+		, MU.PICTURE
+	FROM	#MOM_FRND_TEMP T
+		INNER JOIN MOM_USR MU (NOLOCK)
+		ON	T.FRND_MOM_USR_ID = MU.ID
+	WHERE	T.FRND_MOM_USR_ID <> @MOM_USR_ID
+	ORDER BY NEWID()
+	
+--	UNION ALL
+--	
+--	SELECT	  777777
+--		, 'King Agile'
+--		, '../MOMUserImages/777777.jpg';
 
 GO
 
@@ -1743,6 +1759,7 @@ AS
 			, (SELECT Count(ID) FROM MOM_RCP_CMT WHERE MOM_RCP_ID = MR.ID) AS COMMENTS
 	FROM MOM_RCP MR
 	ORDER BY RATING DESC
+GO
 
 -----------------------------------------------------------------------------------------
 
