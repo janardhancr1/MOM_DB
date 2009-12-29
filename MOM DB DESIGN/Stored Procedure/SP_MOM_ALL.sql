@@ -982,6 +982,7 @@ AS
 	FROM	MOM_FRND (NOLOCK)
 	WHERE	MOM_USR_ID = @MOM_USR_ID
 	AND	BLOCKED = 0
+	AND	IS_FRIEND = 1
 	
 	UNION
 	
@@ -993,6 +994,7 @@ AS
 	WHERE	FRND_MOM_USR_ID = @MOM_USR_ID
 	AND	MF.BLOCKED = 0
 	AND	MU.ID IS NULL
+	AND	IS_FRIEND = 1
 	
 	UNION
 	
@@ -2002,7 +2004,108 @@ AS
 --		, 'King Agile'
 --		, '../MOMUserImages/777777.jpg';
 
+<<<<<<< .mineGO
+
+-----------------------------------------------------------------------------------------
+
+IF OBJECT_ID('SP_MOM_USR_PIC_UPD_BY_MOM_USR_ID') IS NOT NULL
+	DROP PROC SP_MOM_USR_PIC_UPD_BY_MOM_USR_ID
 GO
+
+CREATE PROC SP_MOM_USR_PIC_UPD_BY_MOM_USR_ID
+(
+	  @MOM_USR_ID	BIGINT
+	, @PICTURE	VARCHAR (255)
+)
+AS
+	SET TRAN ISOLATION LEVEL READ COMMITTED
+	SET NOCOUNT ON
+	
+	BEGIN TRAN
+	
+	BEGIN TRY	
+	
+		UPDATE 	MOM_USR
+		SET	PICTURE = @PICTURE
+			, PICTURE_STATUS = 1
+		WHERE	ID = @MOM_USR_ID
+
+	END TRY
+	BEGIN CATCH
+	
+		DECLARE @ErrorMessage NVARCHAR(4000);
+		DECLARE @ErrorSeverity INT;
+		DECLARE @ErrorState INT;
+		
+		SELECT	  @ErrorMessage = ERROR_MESSAGE()
+			, @ErrorSeverity = ERROR_SEVERITY()
+			, @ErrorState = ERROR_STATE();
+	
+		IF @@TRANCOUNT > 0 
+			ROLLBACK TRAN
+		
+		RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);	
+	END CATCH
+	
+	IF @@TRANCOUNT > 0
+		COMMIT TRAN
+GO
+
+-----------------------------------------------------------------------------------------
+
+IF OBJECT_ID('SP_MOM_FRND_ADD_BY_MOM_USR_ID') IS NOT NULL
+	DROP PROC SP_MOM_FRND_ADD_BY_MOM_USR_ID
+GO
+
+CREATE PROC SP_MOM_FRND_ADD_BY_MOM_USR_ID
+(
+	  @MOM_USR_ID		BIGINT
+	, @FRND_MOM_USR_ID	BIGINT
+)
+AS
+	SET TRAN ISOLATION LEVEL READ COMMITTED
+	SET NOCOUNT ON
+	
+	BEGIN TRAN
+	
+	BEGIN TRY
+	
+		--IF EXISTS(SELECT 1 FROM MOM_FRND WHERE MOM_USR_ID
+	
+		INSERT INTO MOM_FRND
+		(
+			  MOM_USR_ID
+			, FRND_MOM_USR_ID
+		)
+		SELECT	  @MOM_USR_ID
+			, @FRND_MOM_USR_ID
+		WHERE	NOT EXISTS(
+			SELECT	1
+			FROM	MOM_FRND (NOLOCK)
+			WHERE	MOM_USR_ID = @MOM_USR_ID
+			AND	FRND_MOM_USR_ID = @FRND_MOM_USR_ID
+			)
+
+	END TRY
+	BEGIN CATCH
+	
+		DECLARE @ErrorMessage NVARCHAR(4000);
+		DECLARE @ErrorSeverity INT;
+		DECLARE @ErrorState INT;
+		
+		SELECT	  @ErrorMessage = ERROR_MESSAGE()
+			, @ErrorSeverity = ERROR_SEVERITY()
+			, @ErrorState = ERROR_STATE();
+	
+		IF @@TRANCOUNT > 0 
+			ROLLBACK TRAN
+		
+		RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);	
+	END CATCH
+	
+	IF @@TRANCOUNT > 0
+		COMMIT TRAN
+=======GO
 
 set ANSI_NULLS ON
 set QUOTED_IDENTIFIER ON
@@ -2093,6 +2196,8 @@ AS
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
 
+<<<<<<< .mine
+>>>>>>> .theirsGO=======
 GO
 
 set ANSI_NULLS ON
@@ -2388,4 +2493,4 @@ AS
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
 
-GO
+GO>>>>>>> .r34
