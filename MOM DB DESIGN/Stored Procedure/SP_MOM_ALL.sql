@@ -2004,7 +2004,7 @@ AS
 --		, 'King Agile'
 --		, '../MOMUserImages/777777.jpg';
 
-<<<<<<< .mineGO
+GO
 
 -----------------------------------------------------------------------------------------
 
@@ -2105,7 +2105,9 @@ AS
 	
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
-=======GO
+GO
+
+--------------------------------------------------------------------------------------------------------------------------------------
 
 set ANSI_NULLS ON
 set QUOTED_IDENTIFIER ON
@@ -2134,7 +2136,7 @@ BEGIN
 END
 
 Go
-
+-------------------------------------------------------------------------------------------------------------------------------------------
 set ANSI_NULLS ON
 set QUOTED_IDENTIFIER ON
 go
@@ -2196,8 +2198,6 @@ AS
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
 
-<<<<<<< .mine
->>>>>>> .theirsGO=======
 GO
 
 set ANSI_NULLS ON
@@ -2492,38 +2492,34 @@ AS
 	
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
+
+GO
+
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
 go
 
-
-CREATE PROC [dbo].[SP_MOM_ANSW_ADD]
+ALTER PROC [dbo].[SP_MOM_USR_BASICS_UPDATE]
 (
-	  @MOM_USR_ID	BIGINT
-	, @MOM_QSTN_ID	INT
-	, @ANSWER	NVARCHAR (1000)
+	  @COUNTRY		NVARCHAR(50)	= NULL
+	, @ZIP			NVARCHAR(10)	= NULL
+	, @LOCATION		NVARCHAR(255)	= NULL
+	, @MOM_USR_ID	BIGINT
 )
 AS
 	SET TRAN ISOLATION LEVEL READ UNCOMMITTED
 	SET NOCOUNT ON
 	
 	BEGIN TRAN
-		
-	BEGIN TRY	
-		
-		
-		INSERT INTO MOM_ANWS
-		(
-			  MOM_USR_ID
-			, MOM_QSTN_ID
-			, ANSWER
-		)
-		VALUES
-		(
-			  @MOM_USR_ID
-			, @MOM_QSTN_ID
-			, @ANSWER
-		)
-		
-		
+	
+	BEGIN TRY
+
+	UPDATE MOM_USR
+	SET		  COUNTRY	= @COUNTRY
+			, ZIP		= @ZIP
+			, LOCATION	= @LOCATION
+	WHERE	ID = @MOM_USR_ID
+
 	END TRY
 	BEGIN CATCH
 	
@@ -2543,7 +2539,10 @@ AS
 	
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
-go
+
+
+GO
+
 
 CREATE PROC [dbo].[SP_MOM_ALBM_PHTO_ADD]
 (
