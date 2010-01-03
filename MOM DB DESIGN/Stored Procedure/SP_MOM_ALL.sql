@@ -2634,3 +2634,61 @@ AS
 		COMMIT TRAN
 GO
 
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_MOM_ALBM_ADD') IS NOT NULL
+	DROP PROC SP_MOM_ALBM_ADD
+GO
+
+CREATE PROC SP_MOM_ALBM_ADD
+(
+	    @MOM_USR_ID	BIGINT
+	  , @TITLE	NVARCHAR (255)
+	  , @DESCRIPTION	NVARCHAR (500)
+	  , @SHARE	NVARCHAR (100)
+	  , @ID		INT OUT
+)
+AS
+	SET TRAN ISOLATION LEVEL READ UNCOMMITTED
+	SET NOCOUNT ON
+	
+	BEGIN TRAN
+	
+	BEGIN TRY
+
+		INSERT INTO MOM_ALBM
+		(
+			  MOM_USR_ID
+			, TITLE
+			, DESCRIPTION
+			, SHARE
+		)
+		VALUES
+		(
+			  @MOM_USR_ID
+			, @TITLE
+			, @DESCRIPTION
+			, @SHARE
+		)
+		
+		SET @ID = @@IDENTITY
+
+	END TRY
+	BEGIN CATCH
+	
+		DECLARE @ErrorMessage NVARCHAR(4000);
+		DECLARE @ErrorSeverity INT;
+		DECLARE @ErrorState INT;
+		
+		SELECT	  @ErrorMessage = ERROR_MESSAGE()
+			, @ErrorSeverity = ERROR_SEVERITY()
+			, @ErrorState = ERROR_STATE();
+	
+		IF @@TRANCOUNT > 0 
+			ROLLBACK TRAN
+		
+		RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);	
+	END CATCH
+	
+	IF @@TRANCOUNT > 0
+		COMMIT TRAN
+
