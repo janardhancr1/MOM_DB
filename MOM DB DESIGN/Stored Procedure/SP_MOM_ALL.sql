@@ -2109,11 +2109,11 @@ GO
 
 --------------------------------------------------------------------------------------------------------------------------------------
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+IF OBJECT_ID('SP_MOM_KIDS_BY_USR_ID') IS NOT NULL
+	DROP PROC SP_MOM_KIDS_BY_USR_ID
+GO
 
-ALTER PROC [dbo].[SP_MOM_KIDS_BY_USR_ID]
+CREATE PROC [dbo].[SP_MOM_KIDS_BY_USR_ID]
 (
 	@MOM_USR_ID	BIGINT
 )
@@ -2125,7 +2125,7 @@ BEGIN
 	SELECT   ID
 			, KID_FIRST_NAME
 			, KID_GENDER
-			, KID_PHOTO = ISNULL (PHOTO, '../images/nopic.jpg')
+			, KID_PHOTO = ISNULL (KID_PHOTO, '../images/nopic.jpg')
 			, KID_DOB
 			, KID_ABOUT
 			, MOM_USR_ID
@@ -2137,12 +2137,11 @@ END
 
 Go
 -------------------------------------------------------------------------------------------------------------------------------------------
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+IF OBJECT_ID('SP_MOM_KIDS_ADD') IS NOT NULL
+	DROP PROC SP_MOM_KIDS_ADD
+GO
 
-
-ALTER PROC [dbo].[SP_MOM_KIDS_ADD]
+CREATE PROC [dbo].[SP_MOM_KIDS_ADD]
 (
 	  @KID_FIRST_NAME	VARCHAR (50)
 	, @KID_GENDER		VARCHAR (20)
@@ -2200,11 +2199,12 @@ AS
 
 GO
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_MOM_USR_INTEREST_UPDATE') IS NOT NULL
+	DROP PROC SP_MOM_USR_INTEREST_UPDATE
+GO
 
-ALTER PROC [dbo].[SP_MOM_USR_INTEREST_UPDATE]
+CREATE PROC [dbo].[SP_MOM_USR_INTEREST_UPDATE]
 (
 	  @MOM_USR_INTEREST		TEXT
 	, @MOM_USR_ID		BIGINT
@@ -2244,11 +2244,12 @@ AS
 
 GO
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_GET_MOM_USR_FAV') IS NOT NULL
+	DROP PROC SP_GET_MOM_USR_FAV
+GO
 
-ALTER PROC [dbo].[SP_GET_MOM_USR_FAV]
+CREATE PROC [dbo].[SP_GET_MOM_USR_FAV]
 (
 	@MOM_USR_ID	INT
 )
@@ -2270,11 +2271,12 @@ END
 
 GO
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_MOM_USR_FAV_UPDATE') IS NOT NULL
+	DROP PROC SP_MOM_USR_FAV_UPDATE
+GO
 
-ALTER PROC [dbo].[SP_MOM_USR_FAV_UPDATE]
+CREATE PROC [dbo].[SP_MOM_USR_FAV_UPDATE]
 (
 	  @MOM_FAV_CELEB		TEXT	= NULL
 	, @MOM_FAV_MOV			TEXT	= NULL
@@ -2322,11 +2324,12 @@ AS
 
 GO
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_GET_MOM_USR_PRIVACY') IS NOT NULL
+	DROP PROC SP_GET_MOM_USR_PRIVACY
+GO
 
-ALTER PROC [dbo].[SP_GET_MOM_USR_PRIVACY]
+CREATE PROC [dbo].[SP_GET_MOM_USR_PRIVACY]
 (
 	@MOM_USR_ID	INT
 )
@@ -2354,11 +2357,12 @@ END
 
 Go
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_MOM_USR_PRIVACY_UPDATE') IS NOT NULL
+	DROP PROC SP_MOM_USR_PRIVACY_UPDATE
+GO
 
-ALTER PROC [dbo].[SP_MOM_USR_PRIVACY_UPDATE]
+CREATE PROC [dbo].[SP_MOM_USR_PRIVACY_UPDATE]
 (
 	  @MOM_SHW_NAME			NVARCHAR(20)	= NULL
 	, @MOM_SHW_DOB			NVARCHAR(20)	= NULL
@@ -2417,11 +2421,12 @@ AS
 
 GO
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_GET_MOM_BLK_USRS') IS NOT NULL
+	DROP PROC SP_GET_MOM_BLK_USRS
+GO
 
-ALTER PROC [dbo].[SP_GET_MOM_BLK_USRS]
+CREATE PROC [dbo].[SP_GET_MOM_BLK_USRS]
 (
 	@MOM_USR_ID	BIGINT
 )
@@ -2444,9 +2449,10 @@ END
 
 GO
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_MOM_BLK_USRS_ADD') IS NOT NULL
+	DROP PROC SP_MOM_BLK_USRS_ADD
+GO
 
 
 CREATE PROC [dbo].[SP_MOM_BLK_USRS_ADD]
@@ -2495,11 +2501,12 @@ AS
 
 GO
 
-set ANSI_NULLS ON
-set QUOTED_IDENTIFIER ON
-go
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_MOM_USR_BASICS_UPDATE') IS NOT NULL
+	DROP PROC SP_MOM_USR_BASICS_UPDATE
+GO
 
-ALTER PROC [dbo].[SP_MOM_USR_BASICS_UPDATE]
+CREATE PROC [dbo].[SP_MOM_USR_BASICS_UPDATE]
 (
 	  @COUNTRY		NVARCHAR(50)	= NULL
 	, @ZIP			NVARCHAR(10)	= NULL
@@ -2543,6 +2550,41 @@ AS
 
 GO
 
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_GET_MOM_ALBM') IS NOT NULL
+	DROP PROC SP_GET_MOM_ALBM
+GO
+
+CREATE PROC SP_GET_MOM_ALBM
+(
+	@MOM_USR_ID	BIGINT
+)
+AS
+BEGIN
+	
+	SET TRAN ISOLATION LEVEL READ UNCOMMITTED
+	SET NOCOUNT ON
+	
+	SELECT	  A.ID
+		, A.TITLE
+		, A.DESCRIPTION
+		, A.PHOTOS
+		, U.FULL_NAME
+		, TIME		= DBO.FN_MOM_DATE_DIFF(A.TIME, GETDATE())
+		, ALBM_PHOTOS	= ISNULL((SELECT TOP 1 FILE_NAME FROM MOM_ALBM_PHTO T WHERE T.MOM_ALBM_ID = A.ID), '../images/nopic.jpg')
+	FROM	MOM_ALBM A (NOLOCK)
+		INNER JOIN MOM_USR U (NOLOCK)
+		ON	A.MOM_USR_ID = U.ID
+	WHERE	A.MOM_USR_ID = @MOM_USR_ID
+	ORDER BY	A.TIME DESC
+
+END
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+IF OBJECT_ID('SP_MOM_ALBM_PHTO_ADD') IS NOT NULL
+	DROP PROC SP_MOM_ALBM_PHTO_ADD
+GO
 
 CREATE PROC [dbo].[SP_MOM_ALBM_PHTO_ADD]
 (
@@ -2567,7 +2609,7 @@ AS
 		VALUES
 		(
 			  @MOM_ALBM_ID
-			, @FILE_NAME
+			, '../MOMUserImages/' + @FILE_NAME
 			, @DESCRIPTION
 		)
 
@@ -2590,4 +2632,5 @@ AS
 	
 	IF @@TRANCOUNT > 0
 		COMMIT TRAN
-go
+GO
+
