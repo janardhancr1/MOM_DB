@@ -2609,8 +2609,8 @@ AS
 		VALUES
 		(
 			  @MOM_ALBM_ID
-			, LEFT(@FILE_NAME, 255)
-			, LEFT(@DESCRIPTION, 500)
+			, @FILE_NAME
+			, @DESCRIPTION
 		)
 
 	END TRY
